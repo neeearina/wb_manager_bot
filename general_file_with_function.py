@@ -1,4 +1,6 @@
 # здесь все функции для бота
+# https://www.wildberries.ru/catalog/83511998/detail.aspx?targetUrl=MI
+# https://www.wildberries.ru/catalog/83511998/detail.aspx
 from telegram import ReplyKeyboardMarkup
 from telegram.ext import ConversationHandler
 
@@ -27,7 +29,7 @@ markup3 = ReplyKeyboardMarkup(reply_keyboard3, one_time_keyboard=True, resize_ke
 
 
 async def add(update, context):  # команда пользователя, бот спрашивает про ссылку на товар с вб
-    await update.message.reply_text("Добавление нового товара для отслеивания.\n"
+    await update.message.reply_text("Добавление нового товара для отслеживания.\n"
                                     "\n"
                                     "Отправь ссылку на товар из котолога Wildberries\n", reply_markup=markup3)
     return 1

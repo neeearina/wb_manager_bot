@@ -22,10 +22,10 @@ def main():
     conv_handler1 = ConversationHandler(
         entry_points=[CommandHandler('add', add)],
         states={
-            1: [MessageHandler(filters.TEXT & ~filters.COMMAND, ask_source)], # бот спрашивает про ссылку на товар
-            2: [MessageHandler(filters.TEXT & ~filters.COMMAND, ask_price)] # бот спрашивает про цену
+            1: [MessageHandler(filters.TEXT & ~filters.COMMAND, ask_source)],  # бот спрашивает про ссылку на товар
+            2: [MessageHandler(filters.TEXT & ~filters.COMMAND, ask_price)]  # бот спрашивает про цену
         },
-        fallbacks=[CommandHandler('stop_add', stop_add)] # полностью добавляет товар в бд
+        fallbacks=[CommandHandler('stop_add', stop_add)]  # полностью добавляет товар в бд
     )
 
     application.add_handler(conv_handler1)
