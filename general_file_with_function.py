@@ -3,6 +3,7 @@
 # https://www.wildberries.ru/catalog/83511998/detail.aspx
 from telegram import ReplyKeyboardMarkup
 from telegram.ext import ConversationHandler
+from selenium_wb import selenium_find
 
 reply_keyboard2 = [['/add'], ['/look_all']]
 markup2 = ReplyKeyboardMarkup(reply_keyboard2, one_time_keyboard=True, resize_keyboard=True)
@@ -31,15 +32,19 @@ markup3 = ReplyKeyboardMarkup(reply_keyboard3, one_time_keyboard=True, resize_ke
 async def add(update, context):  # команда пользователя, бот спрашивает про ссылку на товар с вб
     await update.message.reply_text("Добавление нового товара для отслеживания.\n"
                                     "\n"
-                                    "Отправь ссылку на товар из котолога Wildberries\n", reply_markup=markup3)
+                                    "Отправь артикул товара из котолога Wildberries\n", reply_markup=markup3)
     return 1
 
 
 async def ask_source(update, context):  # бот читает ссылку на товар и спрашивает о цене
-    source_product = update.message.text  # здесь ответ пользователя о ссылке на товар
-    print(source_product)
+    source_product = update.message.text  # здесь ответ пользователя - артикул на товар
+    await update.message.reply_text('Артикул получен, немного подождите...')
+    answ = selenium_find(source_product)
+    if answ is None:
+        await update.message.reply_text('Кажется, что-то пошло не так. Повторите попытку.', reply_markup=markup4)
+        return ConversationHandler.END
     await update.message.reply_text(
-        f"Ссылка получена.\n"
+        f"Артикул на {answ} получена.\n"
         f"\n"
         f"Напиши цену, ниже которой надо оповестить тебя:)", reply_markup=markup3)
     return 2
@@ -47,7 +52,6 @@ async def ask_source(update, context):  # бот читает ссылку на 
 
 async def ask_price(update, context):  # бот считывает цену, завершает диалог и добавляет все в бд
     price_product = update.message.text
-    print(price_product)
     await update.message.reply_text('Цена получена.\n'
                                     'Товар добавлен в список отслеживаемых.\n'
                                     'Мы оповестим тебя сразу, как только цена на товар упадёт!')
