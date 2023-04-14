@@ -1,4 +1,4 @@
-# в этом файле вся основа приложения, регистрация команд, запуск приложения
+# в этом файле вся основа приложения, регистрация команд, запуск тг и бд
 
 import logging
 from telegram.ext import Application, MessageHandler, filters, ConversationHandler
