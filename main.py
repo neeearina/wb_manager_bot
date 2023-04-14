@@ -5,6 +5,7 @@ from telegram.ext import Application, MessageHandler, filters, ConversationHandl
 from telegram.ext import ApplicationBuilder
 from telegram.ext import CommandHandler
 from general_file_with_function import *
+from data import db_session
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG
@@ -18,6 +19,7 @@ def main():
     application = Application.builder().token("5853283682:AAH8OfYbD093o3_OAK2rMP-cCkR_8mIs9EE").build()
     application.add_handler(CommandHandler("help", help))
     application.add_handler(CommandHandler("start", start))
+    application.add_handler(CommandHandler("delete", delete))
     application.add_handler(CommandHandler("look_all", look_all))
     conv_handler1 = ConversationHandler(
         entry_points=[CommandHandler('add', add)],
@@ -33,4 +35,5 @@ def main():
 
 
 if __name__ == '__main__':
+    db_session.global_init("db/goods_from_wb.db")
     main()
