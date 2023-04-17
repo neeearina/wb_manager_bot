@@ -40,6 +40,22 @@ def find_good_in_db(articul, chat_id):
         return True  # в бд нашли уже добавленный товар
 
 
+def look():
+    db_sess = db_session.create_session()
+    sp1 = []
+    q = db_sess.query(OrmGoods)
+    for c in q:
+        sp1.append(c)
+    return sp1
+
+
+def deleting(i):
+    db_sess = db_session.create_session()
+    q = db_sess.query(OrmGoods).filter(OrmGoods.id == int(i))
+    db_sess.delete(q)
+    db_sess.commit()
+
+
 def selenium_find(articul):
     try:
         url = 'https://www.wildberries.ru/'

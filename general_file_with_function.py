@@ -3,7 +3,7 @@
 # https://www.wildberries.ru/catalog/83511998/detail.aspx
 from telegram import ReplyKeyboardMarkup
 from telegram.ext import ConversationHandler
-from selenium_wb import selenium_find, find_good_in_db, add_to_db
+from selenium_wb import selenium_find, find_good_in_db, add_to_db, look, deleting
 
 reply_keyboard2 = [['/add'], ['/look_all']]
 markup2 = ReplyKeyboardMarkup(reply_keyboard2, one_time_keyboard=True, resize_keyboard=True)
@@ -103,12 +103,39 @@ async def stop_add(update, context):  # останавливает диалог 
 
 
 async def look_all(update, context):
-    # выводит все добавленные пользователем товары
-    pass
+    sp = look()
+    await update.message.reply_text('Номер товара, артикул, название, текущая, цена, цена отслеживания',
+                                    reply_markup=markup4)
+    for elem in sp:
+        await update.message.reply_text(f'{elem}',
+                                        reply_markup=markup4)
+        return ConversationHandler.END
+    return ConversationHandler.END
 
 
 async def delete(update, context):
-    # выводдится список всех добавленных пользователем товаров
-    # пользователь выбирает номер товара и отправляет
-    # бот удаляет из бд номер этого товара, он больше не отслеживается
-    pass
+    await update.message.reply_text('Чтобы удалить товар, введите его номер',
+                                    reply_markup=markup4)
+    sp = look()
+    await update.message.reply_text('Номер товара, артикул, название, текущая, цена, цена(от)',
+                                    reply_markup=markup4)
+    for elem in sp:
+        await update.message.reply_text(f'{elem}',
+                                        reply_markup=markup4)
+    return 1
+
+
+async def d(update, context):
+    price_product_to_look = int(update.message.text)
+    await update.message.reply_text('Номер товара получен',
+                                    reply_markup=markup4)
+    deleting(price_product_to_look)
+    await update.message.reply_text('Неверный или несуществующий номер товара',
+                                    reply_markup=markup4)
+    return ConversationHandler.END
+
+
+async def stop_delete(update, context):
+    await update.message.reply_text('Товар не удален.\n'
+                                    'Выберите дальнейшие действия.', reply_markup=markup4)
+    return ConversationHandler.END
