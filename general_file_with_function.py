@@ -33,7 +33,7 @@ markup3 = ReplyKeyboardMarkup(reply_keyboard3, one_time_keyboard=True, resize_ke
 async def add(update, context):  # команда пользователя, бот спрашивает про ссылку на товар с вб
     await update.message.reply_text("Добавление нового товара для отслеживания.\n"
                                     "\n"
-                                    "Отправь артикул товара из котолога Wildberries\n", reply_markup=markup3)
+                                    "Отправь артикул товара из каталога Wildberries\n", reply_markup=markup3)
     return 1
 
 
