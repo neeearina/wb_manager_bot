@@ -65,7 +65,7 @@ async def ask_source(update, context):  # бот читает ссылку на 
             f"Артикул на {sp[1]} действителен.\n"
             f"\n"
             f"Напиши цену, ниже которой надо оповестить тебя:)", reply_markup=markup3)
-        photo = open('photo_from_wb.jpg', 'rb')
+        photo = open('images/photo_from_wb.jpg', 'rb')
         await context.bot.send_document(chat_id=chat_id, document=photo)
         return 2
     else:
