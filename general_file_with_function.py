@@ -33,7 +33,7 @@ markup3 = ReplyKeyboardMarkup(reply_keyboard3, one_time_keyboard=True, resize_ke
 async def add(update, context):  # команда пользователя, бот спрашивает про ссылку на товар с вб
     await update.message.reply_text("Добавление нового товара для отслеживания.\n"
                                     "\n"
-                                    "Отправь артикул товара из каталога Wildberries\n", reply_markup=markup3)
+                                    "Отправь артикул товара из котолога Wildberries\n", reply_markup=markup3)
     return 1
 
 
@@ -65,8 +65,6 @@ async def ask_source(update, context):  # бот читает ссылку на 
             f"Артикул на {sp[1]} действителен.\n"
             f"\n"
             f"Напиши цену, ниже которой надо оповестить тебя:)", reply_markup=markup3)
-        photo = open('images/photo_from_wb.jpg', 'rb')
-        await context.bot.send_document(chat_id=chat_id, document=photo)
         return 2
     else:
         await update.message.reply_text('Артикул недействителен. Попробуйте еще раз.', reply_markup=markup4)
@@ -105,7 +103,8 @@ async def stop_add(update, context):  # останавливает диалог 
 
 
 async def look_all(update, context):
-    sp = look()
+    chat_id = update.message.from_user.id
+    sp = look(chat_id)
     await update.message.reply_text('Номер товара, артикул, название, текущая, цена, цена отслеживания',
                                     reply_markup=markup4)
     for elem in sp:
@@ -116,9 +115,10 @@ async def look_all(update, context):
 
 
 async def delete(update, context):
+    chat_id = update.message.from_user.id
     await update.message.reply_text('Чтобы удалить товар, введите его номер',
                                     reply_markup=markup4)
-    sp = look()
+    sp = look(chat_id)
     await update.message.reply_text('Номер товара, артикул, название, текущая, цена, цена(от)',
                                     reply_markup=markup4)
     for elem in sp:
@@ -128,12 +128,9 @@ async def delete(update, context):
 
 
 async def d(update, context):
+    chat_id = update.message.from_user.id
     price_product_to_look = int(update.message.text)
-    await update.message.reply_text('Номер товара получен',
-                                    reply_markup=markup4)
-    deleting(price_product_to_look)
-    await update.message.reply_text('Неверный или несуществующий номер товара',
-                                    reply_markup=markup4)
+    deleting(price_product_to_look, chat_id)
     return ConversationHandler.END
 
 

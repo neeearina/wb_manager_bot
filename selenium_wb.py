@@ -40,19 +40,23 @@ def find_good_in_db(articul, chat_id):
         return True  # в бд нашли уже добавленный товар
 
 
-def look():
+def look(chat_id):
     db_sess = db_session.create_session()
     sp1 = []
-    q = db_sess.query(OrmGoods)
+    q = db_sess.query(OrmGoods).filter(OrmGoods.chat_id == int(chat_id))
     for c in q:
         sp1.append(c)
     return sp1
 
 
-def deleting(i):
+def deleting(i, chat_id):
     db_sess = db_session.create_session()
-    q = db_sess.query(OrmGoods).filter(OrmGoods.id == int(i))
+    q = db_sess.query(OrmGoods).filter(OrmGoods.id == int(i), OrmGoods.chat_id == int(chat_id)).one()
     db_sess.delete(q)
+    k = 0
+    for user in db_sess.query(OrmGoods).all():
+        k += 1
+        user.id = k
     db_sess.commit()
 
 
@@ -62,28 +66,28 @@ def selenium_find(articul):
         service = Service(executable_path='C:/chromedriver/chromedriver')  # указываем путь до драйвера
         browser = webdriver.Chrome(service=service)
         browser.get(url)
-        time.sleep(1)
+        time.sleep(10)
         wb_search = browser.find_element(By.ID, 'searchInput')
         wb_search.send_keys(articul)
         wb_search.send_keys(Keys.ENTER)
-        time.sleep(2)  # заходим на страницу самого товара вб по артикулу
+        time.sleep(10)  # заходим на страницу самого товара вб по артикулу
         """Вытаскиваем название, артикул, цена"""
         good_name = browser.find_element(By.CLASS_NAME, 'product-page__header').text
         good_id = browser.find_element(By.ID, 'productNmId').text
         good_price = browser.find_element(By.CLASS_NAME, 'price-block__final-price').text
         print(good_name, good_price)
 
-        cont = browser.find_element(By.CLASS_NAME, 'sw-slider-kt-mix__wrap')  # находим класс со слайдером
-        good_img = cont.find_element(By.TAG_NAME, 'img')  # находим тег фотографии
-        source_photo = good_img.get_attribute('src')  # ссылка на фото
-        img = urllib.request.urlopen(source_photo).read()
-        out = open("images/photo_from_wb.jpg", "wb")
-        out.write(img)
-        out.close()
-
-        time.sleep(1)
+        # cont = browser.find_element(By.CLASS_NAME, 'sw-slider-kt-mix__wrap')  # находим класс со слайдером
+        # good_img = cont.find_element(By.TAG_NAME, 'img')  # находим тег фотографии
+        # source_photo = good_img.get_attribute('src')  # ссылка на фото
+        # img = urllib.request.urlopen(source_photo).read()
+        # out = open("img.jpg", "wb")
+        # out.write(img)
+        # out.close()
+        time.sleep(10)
         browser.quit()
         return [good_id, good_name, good_price]
-    except Exception:
+    except Exception as e:
+        print(e)
         browser.quit()
         return None
