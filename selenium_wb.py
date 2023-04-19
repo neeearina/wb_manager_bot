@@ -76,14 +76,14 @@ def selenium_find(articul):
         good_id = browser.find_element(By.ID, 'productNmId').text
         good_price = browser.find_element(By.CLASS_NAME, 'price-block__final-price').text
         print(good_name, good_price)
-
-        # cont = browser.find_element(By.CLASS_NAME, 'sw-slider-kt-mix__wrap')  # находим класс со слайдером
-        # good_img = cont.find_element(By.TAG_NAME, 'img')  # находим тег фотографии
-        # source_photo = good_img.get_attribute('src')  # ссылка на фото
-        # img = urllib.request.urlopen(source_photo).read()
-        # out = open("img.jpg", "wb")
-        # out.write(img)
-        # out.close()
+        cont = browser.find_element(By.CLASS_NAME, 'sw-slider-kt-mix__wrap')  # находим класс со слайдером
+        good_img = cont.find_element(By.TAG_NAME, 'img')  # находим тег фотографии
+        source_photo = good_img.get_attribute('src')  # ссылка на фото
+        img = urllib.request.urlopen(source_photo).read()
+        out = open("photo_from_wb.jpg", "wb")
+        out = open("images/photo_from_wb.jpg", "wb")
+        out.write(img)
+        out.close()
         time.sleep(10)
         browser.quit()
         return [good_id, good_name, good_price]
