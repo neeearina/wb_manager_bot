@@ -13,3 +13,9 @@ class OrmGoods(SqlAlchemyBase):
     name_good = sqlalchemy.Column(sqlalchemy.Text)  # название товара
     price_good = sqlalchemy.Column(sqlalchemy.Integer)  # цена товара на данный момент
     price_to_look = sqlalchemy.Column(sqlalchemy.Integer)  # цена за которой надо следить
+
+    def __repr__(self):
+        return f'Товар номер {self.id}\n' \
+               f'{self.name_good}. Артикул: {self.articul_good}.\n' \
+               f'Цена: {self.price_good}\n' \
+               f'Желаемая цена: {self.price_to_look}'
