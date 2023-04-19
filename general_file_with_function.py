@@ -134,10 +134,12 @@ async def d(update, context):
     chat_id = update.message.from_user.id
     price_product_to_look = int(update.message.text)
     deleting(price_product_to_look, chat_id)
+    await update.message.reply_text('Товар удален.\n'
+                                    'Выберите дальнейшие действия.', reply_markup=markup4)
     return ConversationHandler.END
 
 
 async def stop_delete(update, context):
-    await update.message.reply_text('Товар не удален.\n'
+    await update.message.reply_text('Удаление приостановлено.\n'
                                     'Выберите дальнейшие действия.', reply_markup=markup4)
     return ConversationHandler.END
