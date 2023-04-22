@@ -25,7 +25,7 @@ async def start(update, context):
     # user_id = update.message.from_user.id
     file_text = open('texts/start_text', mode='r', encoding="utf-8")
     data_read = file_text.read()
-    await price_vs_price
+    #await price_vs_price
     await update.message.reply_text(data_read, reply_markup=markup)
 
 
@@ -68,7 +68,6 @@ async def ask_source(update, context):  # бот читает ссылку на 
             f"Артикул на {sp[1]} действителен.\n"
             f"\n"
             f"Напиши цену, ниже которой надо оповестить тебя:)", reply_markup=markup3)
-        photo = open('photo_from_wb.jpg', 'rb')
         photo = open('images/photo_from_wb.jpg', 'rb')
         await context.bot.send_document(chat_id=chat_id, document=photo)
         return 2
