@@ -43,7 +43,7 @@ def find_good_in_db(articul, chat_id):
 def look(chat_id):
     db_sess = db_session.create_session()
     sp1 = []
-    q = db_sess.query(OrmGoods).filter(OrmGoods.chat_id == int(chat_id))
+    q = db_sess.query(OrmGoods).filter(OrmGoods.chat_id == int(chat_id)).all()
     for c in q:
         sp1.append(c)
     return sp1
@@ -58,6 +58,23 @@ def deleting(i, chat_id):
         k += 1
         user.id = k
     db_sess.commit()
+
+
+def select_price_and_articul(chat_id):
+    db_sess = db_session.create_session()
+    pa = []
+    q = db_sess.query(OrmGoods.name_good, OrmGoods.articul_good, OrmGoods.price_to_look).filter(OrmGoods.chat_id == int(chat_id))
+    for c in q:
+        pa.append(c)
+    return pa
+
+
+def add_price(articul, price):
+    db_sess = db_session.create_session()
+    for user in db_sess.query(OrmGoods).filter(OrmGoods.articul_good == str(articul)).all():
+        user.price_good = price
+    db_sess.commit()
+
 
 
 def selenium_find(articul):

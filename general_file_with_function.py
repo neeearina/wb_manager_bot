@@ -1,9 +1,11 @@
 # здесь все функции для бота
 # https://www.wildberries.ru/catalog/83511998/detail.aspx?targetUrl=MI
 # https://www.wildberries.ru/catalog/83511998/detail.aspx
+import time
+
 from telegram import ReplyKeyboardMarkup
 from telegram.ext import ConversationHandler
-from selenium_wb import selenium_find, find_good_in_db, add_to_db, look, deleting
+from selenium_wb import selenium_find, find_good_in_db, add_to_db, look, deleting, select_price_and_articul, add_price
 
 reply_keyboard2 = [['/add'], ['/look_all']]
 markup2 = ReplyKeyboardMarkup(reply_keyboard2, one_time_keyboard=True, resize_keyboard=True)
@@ -23,6 +25,7 @@ async def start(update, context):
     # user_id = update.message.from_user.id
     file_text = open('texts/start_text', mode='r', encoding="utf-8")
     data_read = file_text.read()
+    await price_vs_price
     await update.message.reply_text(data_read, reply_markup=markup)
 
 
@@ -143,3 +146,26 @@ async def stop_delete(update, context):
     await update.message.reply_text('Удаление приостановлено.\n'
                                     'Выберите дальнейшие действия.', reply_markup=markup4)
     return ConversationHandler.END
+
+
+async def price_vs_price(update, context):
+    time.sleep(1)
+    chat_id = update.message.from_user.id
+    pa = select_price_and_articul(chat_id)
+    for a in pa:
+        dero = selenium_find(a[1])
+        i = dero[2].split(' ')
+        if int(i[0]) < int(a[2]):
+            add_price(a[1], dero[2])
+            await update.message.reply_text('Товар удален.\n'
+                                    'Выберите дальнейшие действия.', reply_markup=markup4)
+        else:
+            add_price(a[1], dero[2])
+    await price_vs_price
+
+
+
+
+
+
+
