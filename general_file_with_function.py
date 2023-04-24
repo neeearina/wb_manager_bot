@@ -25,7 +25,6 @@ async def start(update, context):
     # user_id = update.message.from_user.id
     file_text = open('texts/start_text', mode='r', encoding="utf-8")
     data_read = file_text.read()
-    #await price_vs_price
     await update.message.reply_text(data_read, reply_markup=markup)
 
 
@@ -68,6 +67,7 @@ async def ask_source(update, context):  # бот читает ссылку на 
             f"Артикул на {sp[1]} действителен.\n"
             f"\n"
             f"Напиши цену, ниже которой надо оповестить тебя:)", reply_markup=markup3)
+        photo = open('photo_from_wb.jpg', 'rb')
         photo = open('images/photo_from_wb.jpg', 'rb')
         await context.bot.send_document(chat_id=chat_id, document=photo)
         return 2
@@ -148,19 +148,20 @@ async def stop_delete(update, context):
 
 
 async def price_vs_price(update, context):
-    time.sleep(1)
-    chat_id = update.message.from_user.id
-    pa = select_price_and_articul(chat_id)
-    for a in pa:
-        dero = selenium_find(a[1])
-        i = dero[2].split(' ')
-        if int(i[0]) < int(a[2]):
-            add_price(a[1], dero[2])
-            await update.message.reply_text('Товар удален.\n'
-                                    'Выберите дальнейшие действия.', reply_markup=markup4)
-        else:
-            add_price(a[1], dero[2])
-    await price_vs_price
+    if price_vs_price:
+        chat_id = update.message.from_user.id
+        print(chat_id)
+        pa = select_price_and_articul(chat_id)
+        for a in pa:
+            dero = selenium_find(a[1])
+            i = dero[2].split(' ')
+            if int(i[0]) < int(a[2]):
+                add_price(a[1], dero[2])
+                await update.message.reply_text(f'Цена на товар с артикулом - {a[1]}, упала до {dero[2]}', reply_markup=markup4)
+            else:
+                add_price(a[1], dero[2])
+    time.sleep(10)
+    return True
 
 
 

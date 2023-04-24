@@ -34,9 +34,11 @@ def main():
                 },
         fallbacks=[CommandHandler('stop_delete', stop_delete)]
     )
-
+    application.add_handler(CommandHandler('ptp', price_vs_price))
     application.add_handler(conv_handler1)
     application.add_handler(conv_handler2)
+    job_queue = app.job_queue
+    job_queue.run_repeating(price_vs_price, interval=60, first=10)
     application.run_polling()
 
 
