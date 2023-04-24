@@ -115,7 +115,6 @@ async def look_all(update, context):
     for elem in sp:
         await update.message.reply_text(f'{elem}',
                                         reply_markup=markup4)
-        return ConversationHandler.END
     return ConversationHandler.END
 
 
