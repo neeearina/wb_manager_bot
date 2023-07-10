@@ -33,7 +33,6 @@ def find_good_in_db(articul, chat_id):
                                                   OrmGoods.articul_good == int(articul)):
         sp1.append(element)
     if len(sp1) == 0:
-        sp1.clear()
         return False  # в бд не нашли, поэтому добавили новый элемент в бд
     else:
         sp1.clear()
@@ -63,10 +62,14 @@ def deleting(i, chat_id):
 def select_price_and_articul(chat_id):
     db_sess = db_session.create_session()
     pa = []
-    q = db_sess.query(OrmGoods.name_good, OrmGoods.articul_good, OrmGoods.price_to_look).filter(OrmGoods.chat_id == int(chat_id))
+    q = db_sess.query(OrmGoods.name_good, OrmGoods.articul_good, OrmGoods.price_to_look).filter(
+        OrmGoods.chat_id == int(chat_id))
     for c in q:
         pa.append(c)
+    print(pa, 'это то что возвращает селект прайс и артикул')
     return pa
+
+
 
 
 def add_price(articul, price):
@@ -76,18 +79,17 @@ def add_price(articul, price):
     db_sess.commit()
 
 
-
 def selenium_find(articul):
     try:
         url = 'https://www.wildberries.ru/'
         service = Service(executable_path='C:/chromedriver/chromedriver')  # указываем путь до драйвера
         browser = webdriver.Chrome(service=service)
         browser.get(url)
-        time.sleep(10)
+        time.sleep(3)
         wb_search = browser.find_element(By.ID, 'searchInput')
         wb_search.send_keys(articul)
         wb_search.send_keys(Keys.ENTER)
-        time.sleep(10)  # заходим на страницу самого товара вб по артикулу
+        time.sleep(3)  # заходим на страницу самого товара вб по артикулу
         """Вытаскиваем название, артикул, цена"""
         good_name = browser.find_element(By.CLASS_NAME, 'product-page__header').text
         good_id = browser.find_element(By.ID, 'productNmId').text
@@ -101,7 +103,7 @@ def selenium_find(articul):
         out = open("images/photo_from_wb.jpg", "wb")
         out.write(img)
         out.close()
-        time.sleep(10)
+        time.sleep(3)
         browser.quit()
         return [good_id, good_name, good_price]
     except Exception as e:

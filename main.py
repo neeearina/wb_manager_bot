@@ -37,11 +37,10 @@ def main():
     application.add_handler(CommandHandler('ptp', price_vs_price))
     application.add_handler(conv_handler1)
     application.add_handler(conv_handler2)
-    job_queue = app.job_queue
-    job_queue.run_repeating(price_vs_price, interval=60, first=10)
     application.run_polling()
 
 
 if __name__ == '__main__':
     db_session.global_init("db/goods_from_wb.db")
     main()
+

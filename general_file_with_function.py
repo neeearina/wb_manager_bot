@@ -22,10 +22,12 @@ markup = ReplyKeyboardMarkup(reply_keyboard1, one_time_keyboard=True, resize_key
 
 
 async def start(update, context):
-    # user_id = update.message.from_user.id
+    user_id = update.message.from_user.id
     file_text = open('texts/start_text', mode='r', encoding="utf-8")
     data_read = file_text.read()
     await update.message.reply_text(data_read, reply_markup=markup)
+    photo = open('images/img.png', 'rb')
+    await context.bot.send_document(chat_id=user_id, document=photo)
 
 
 reply_keyboard3 = [['/stop_add']]
@@ -149,22 +151,20 @@ async def stop_delete(update, context):
 async def price_vs_price(update, context):
     if price_vs_price:
         chat_id = update.message.from_user.id
-        print(chat_id)
         pa = select_price_and_articul(chat_id)
         for a in pa:
             dero = selenium_find(a[1])
-            i = dero[2].split(' ')
-            if int(i[0]) < int(a[2]):
+            i = dero[2].replace(' ', '').strip('₽')
+            print(i, 'aaa')
+            print(a[2], 'bbbbbbb')
+            if int(i[1]) > int(a[2]):
                 add_price(a[1], dero[2])
-                await update.message.reply_text(f'Цена на товар с артикулом - {a[1]}, упала до {dero[2]}', reply_markup=markup4)
+                await update.message.reply_text(f'Цена на товар с артикулом - {a[1]}, упала до {dero[2]}',
+                                                reply_markup=markup4)
             else:
+                await update.message.reply_text(
+                    f'Цена на товар с артикулом - {a[1]} еще не упала. Сейчас цена - {dero[2]}',
+                    reply_markup=markup4)
                 add_price(a[1], dero[2])
     time.sleep(10)
-    return True
-
-
-
-
-
-
-
+    return price_vs_price
